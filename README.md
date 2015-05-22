@@ -1,6 +1,4 @@
-# Helpers
-
-This module 
+# TQ1-Helpers
 
 ## Usage
 
