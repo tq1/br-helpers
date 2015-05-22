@@ -28,25 +28,27 @@
 
 ### Example
 
+  - Parse Boolean
+
   ```
-
-  helpers = require("br-tq1-helpers")
-
-  config_helper = helpers.config_helper
-
-  # Parse Boolean
 
   config_helper.parseBoolean 'True'  # It return true
   config_helper.parseBoolean 'False' # It return false
+  
+  ```
 
-  # Get Config Value
+  - Get Config Value
 
+  ```
   process.env['Test-1'] = 'test1-env'
   config_helper.getConfigValue 'Test-1', 'test-default' # It return 'test1-env'
   config_helper.getConfigValue 'Test-2', 'test-default' # It return 'test-default'
+  ```
 
-  # Output Config Value
+  - Output Config Value
 
+  ```
+  
   result = 
         config_1: 'config 1'
         config_2: 
