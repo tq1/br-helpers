@@ -1,5 +1,5 @@
 {
-  "name": "helpers",
+  "name": "tq1-helpers",
   "version": "0.0.0",
   "description": "TQ1 Helpers",
   "main": "index.js",
@@ -33,7 +33,6 @@
     "grunt-nodemon": "0.2.1",
     "matchdep": "0.1.2",
     "colors": "1.0.3",
-    "rootpath": "0.1.2",
     "mocha": "1.21.5",
     "chai": "1.10.0",
     "sinon": "1.12.2",

@@ -5,7 +5,7 @@ expect = chai.expect
 assert = chai.assert
 sinon = require('sinon')
 
-helpers = require('lib/helpers')
+helpers = require('../lib/helpers')
 
 
 
