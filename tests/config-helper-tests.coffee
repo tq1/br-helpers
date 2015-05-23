@@ -1,79 +1,106 @@
-require('rootpath')()
-_ = require('lodash')
 chai = require('chai')
-expect = chai.expect
+sinon = require("sinon")
+sinonChai = require("sinon-chai")
 assert = chai.assert
-sinon = require('sinon')
+chai.use sinonChai
+
 
 helpers = require('../lib/helpers')
-
-
+config_helper = helpers.config_helper 
 
 describe 'Config Helper', () ->
 
+  describe 'Get Values', () ->
+
+    value = 'value'
+
+    beforeEach () ->
+      process.env.KEY = value
+
+    it 'should get environment variable', (done) ->
+
+      assert.equal config_helper.getConfigValue(['KEY']), value
+      done()
+
+    it 'should get second environment variable if first is not present', (done) ->
+
+      assert.equal config_helper.getConfigValue(['KEY_NOT_PRESENT', 'KEY']), value
+      done()
+
+    it 'should get default value if no environment variable is present', (done) ->
+
+      assert.equal config_helper.getConfigValue(['KEY_NOT_PRESENT'], 'default'), 'default'
+      done()
+
   describe 'Parse Boolean', () ->
 
-    it 'it should return true if string is "True"', (done) ->
+    it 'should parse boolean string properly', (done) ->
 
-      string = 'True'
-      assert.isTrue = helpers.config_helper.parseBoolean string
+      assert.equal config_helper.parseBoolean('true'), true
+      assert.equal config_helper.parseBoolean('True'), true
+      assert.equal config_helper.parseBoolean('false'), false
+      assert.equal config_helper.parseBoolean('random string'), false
       done()
 
-    it 'it should return false if string is "False"', (done) ->
+  describe 'Output Config Values', () ->
 
-      boolean = 'False'
-      assert.isFalse = helpers.config_helper.parseBoolean boolean
-      done()
+    log_spy = null
 
-  describe 'Get Config Value', () ->
+    beforeEach () ->
 
-    it 'it should return the environment value ', (done) ->
+      log_spy =  sinon.spy console, 'info'
 
-      process.env['Test-1'] = 'test1-env'
+    afterEach () ->
 
-      env_value = helpers.config_helper.getConfigValue ['Test-1'], ''
-      assert.equal(env_value, 'test1-env')
-      done()
-
-    it 'it should return the default value if no env value was set ', (done) ->
-
-      env_value = helpers.config_helper.getConfigValue ['Test-2'], 'test2-env'
-      assert.equal(env_value, 'test2-env')
-      done()
-
-  describe 'Output Config Value', () ->
-
-    result = null
-    before (done) ->
-      result = 
-        config_1: 'config 1'
-        config_2: 
-          config_2_1: 'config 2.1'
-          config_2_2: 'config 2.2'
-
-      done()
+      log_spy.restore()
+      log_spy = null
 
 
-    it 'it should reveal the value to an existent key', (done) ->
-      helpers.config_helper.outputConfigValue result, 'config_1', true
+    it 'should print value in console.log', (done) ->
+
+      obj =
+        key: 'key value'
+        nested:
+          key: 'nested value'
+
+      config_helper.outputConfigValue obj, "key", true
+      config_helper.outputConfigValue obj, "nested.key", true
+
+      assert log_spy.callCount, 2
+
+      spyCall0 = log_spy.getCall(0)
+      spyCall1 = log_spy.getCall(1)
+
+      assert.match spyCall0.args[0], /key value/
+      assert.match spyCall1.args[0], /nested value/
 
       done()
 
-    it 'it should reveal the value to an existent nested key', (done) ->
+    it 'should print \'not set\' console.log if key is not present', (done) ->
 
-      helpers.config_helper.outputConfigValue result, '.config_2.config_2_1', true
+      obj = {}
+
+      config_helper.outputConfigValue obj, "key not present", true
+
+      assert log_spy.callCount, 1
+
+      spyCall0 = log_spy.getCall(0)
+
+      assert.match spyCall0.args[0], /not set/
 
       done()
 
-    it 'it should reveal the value to a non existent key', (done) ->
+    it 'should not print value in console.log if it was asked to hide', (done) ->
 
-      helpers.config_helper.outputConfigValue result, 'config_3', true
+      obj =
+        key: 'key value'
 
-      done()
+      config_helper.outputConfigValue obj, "key", false
 
-    it 'it should not reveal the value to an existent key', (done) ->
+      assert log_spy.callCount, 1
 
-      helpers.config_helper.outputConfigValue result, 'config_1', false
+      spyCall0 = log_spy.getCall(0)
 
+      assert.match spyCall0.args[0], /\*\*\*\*\*/
 
       done()
