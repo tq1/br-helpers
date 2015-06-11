@@ -6,7 +6,7 @@
 
   ```json
   "dependencies": {
-    "br-tq1-helpers": "git+https://github.com/tq1/tq1-helpers.git"
+    "br-tq1-helpers": "git+https://github.com/tq1/br-tq1-helpers.git"
   }
   ```
 2. Call `helpers = require("br-tq1-helpers")`. The require method returns a object which contains all the helpers.
