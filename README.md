@@ -15,6 +15,9 @@
   helpers = require("br-tq1-helpers")
 
   config_helper = helpers.config_helper
+
+  helpers.health_check app
+
   ```
 
 ## Config Helper
@@ -54,6 +57,21 @@
   config_helper.outputConfigValue result, '.config_2.config_2_1', true   # It prints '.config_2.config_2_1: config 2.1'
   config_helper.outputConfigValue result, 'config_1', false              # It prints 'config_1: *****'
   config_helper.outputConfigValue result, 'config_3', true               # It prints 'config_3: not set'
+  ```
+
+## API Health Check endpoint
+
+  This enpoint is to use as a health check. It only returns status 200 on request to '/health-check' path. Use this before any middleware validation. 
+
+### Example
+
+  ```
+    express = require('express')
+    helpers = require("br-tq1-helpers")
+
+    app = express()
+    helpers.health_check app
+    ...
   ```
 
 ## Test
