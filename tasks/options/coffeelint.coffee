@@ -1,4 +1,4 @@
 module.exports =
-  app: 'src/**/*.coffee'
+  app: ['src/**/*.coffee','tests/**/*.coffee']
   options:
     configFile: 'coffeelint.json'
