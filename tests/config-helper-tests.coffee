@@ -6,7 +6,7 @@ chai.use sinonChai
 
 
 helpers = require('../lib/helpers')
-config_helper = helpers.config_helper 
+config_helper = helpers.config_helper
 
 describe 'Config Helper', () ->
 
